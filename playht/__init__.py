@@ -7,11 +7,24 @@ import hashlib
 import traceback
 import time
 
-load_dotenv()
+load_dotenv(dotenv_path=os.path.join(os.getcwd(), ".env"))
 
-playht_userid = os.environ["PLAYHT_USER_ID"]
-playht_secret = os.environ["PLAYHT_SECRET"]
-playht_appid = os.environ["PLAYHT_APP_ID"]
+try:
+    playht_userid = os.environ["PLAYHT_USER_ID"]
+except KeyError:
+    raise Exception(
+        "The environment variable PLAYHT_USER_ID needs to be set to your play.ht user id."
+    )
+
+try:
+    playht_secret = os.environ["PLAYHT_SECRET"]
+except KeyError:
+    raise Exception(
+        "The environment variable PLAYHT_SECRET needs to be set to your play.ht secret token."
+    )
+
+# playht_secret = os.environ["PLAYHT_SECRET"]
+# playht_appid = os.environ["PLAYHT_APP_ID"]
 
 CONVERT_ENDPOINT = "https://play.ht/api/v1/convert"
 CHECK_ENDPOINT = "https://play.ht/api/v1/articleStatus?transcriptionId="
@@ -32,7 +45,7 @@ def tts(
     data = {
         "voice": voice,
         "content": [content],
-        "appId": playht_appid,
+        # "appId": playht_appid,
         "narrationStyle": narration_style,
         "globalSpeed": "%d%%" % (speed),  # // Optional
         #   "ssml": string[],
